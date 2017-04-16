@@ -187,7 +187,7 @@ reconfig:
 # point to the last kernel installed.
 #
 install:
-	[ -d $(OSTREE) ] || mkdir $(OSTREE)
+	[ -d $(OSTREE) ] || mkdir -p $(OSTREE)
 	cp $(KERNEL) $(OSTREE)/$(KERNEL)-$(CONFNAME)
 	-rm -f $(OSTREE)/$(KERNEL)
 	ln -s $(KERNEL)-$(CONFNAME) $(OSTREE)/$(KERNEL)
