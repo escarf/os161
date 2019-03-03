@@ -161,7 +161,7 @@ lock_create(const char *name)
 		kfree(lock);
 		return NULL;
 	}
-	lock->lk_is_free = true;
+	*(lock->lk_is_free) = true;
 	spinlock_init(&lock->lk_lock);
 
 	return lock;
@@ -192,7 +192,7 @@ lock_acquire(struct lock *lock)
 	}
 
 	lock->lk_owner = curthread;
-	lock->lk_is_free = false;
+	*(lock->lk_is_free) = false;
 	
 
 	/* Call this (atomically) once the lock is acquired */
@@ -210,7 +210,7 @@ lock_release(struct lock *lock)
 	HANGMAN_RELEASE(&curthread->t_hangman, &lock->lk_hangman);
 
 	lock->lk_owner = NULL;
-	lock->lk_is_free = true;
+	*(lock->lk_is_free) = true;
 
 	spinlock_release(&lock->lk_lock);
 }
