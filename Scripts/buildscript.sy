@@ -16,3 +16,7 @@ cd ~/src/os161
 bmake
 bmake install
 cd ~/os161/root
+cd ~
+wget -O ~/os161/root/sys161.conf "https://www.ops-class.org/files/sys161.conf"
+cd ..
+trinity@zion:/home$ sudo cp trinity/os161/root/sys161.conf vagrant
