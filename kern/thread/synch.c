@@ -191,7 +191,7 @@ lock_acquire(struct lock *lock)
 		wchan_sleep(lock->lk_wchan, &lock->lk_lock);
 	}
 
-	lock->lk_owner = &curthread;
+	lock->lk_owner = curthread;
 	lock->lk_is_free = false;
 	
 
