@@ -225,7 +225,7 @@ lock_release(struct lock *lock)
 bool
 lock_do_i_hold(struct lock *lock)
 {
-	//return false; //for testing
+	return false; //for testing
 	// if(lock == NULL){
 	// 	return false;
 	// }
