@@ -165,7 +165,9 @@ lock_create(const char *name)
 	//bool temp = true;
 	spinlock_init(&lock->lk_lock);
 	
-	lock->lk_is_free = (bool*) malloc(sizeof(bool));
+	//lock->lk_is_free = (bool*) malloc(sizeof(bool));
+	lock->lk_is_free = kmalloc(sizeof(bool));
+
 	*(lock->lk_is_free) = true;
 	lock->lk_owner = NULL;
 
