@@ -141,6 +141,7 @@ V(struct semaphore *sem)
 struct lock *
 lock_create(const char *name)
 {
+	kprintf("testbub1");
 	struct lock *lock;
 
 	lock = kmalloc(sizeof(*lock));
@@ -153,7 +154,7 @@ lock_create(const char *name)
 		kfree(lock);
 		return NULL;
 	}
-	kprintf("testbub");
+	kprintf("testbub2");
 	HANGMAN_LOCKABLEINIT(&lock->lk_hangman, lock->lk_name);
 	lock->lk_wchan = wchan_create(lock->lk_name);
 	if(lock->lk_wchan == NULL){
