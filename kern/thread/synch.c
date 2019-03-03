@@ -153,7 +153,7 @@ lock_create(const char *name)
 		kfree(lock);
 		return NULL;
 	}
-
+	kprintf("testbub");
 	HANGMAN_LOCKABLEINIT(&lock->lk_hangman, lock->lk_name);
 	lock->lk_wchan = wchan_create(lock->lk_name);
 	if(lock->lk_wchan == NULL){
@@ -162,11 +162,13 @@ lock_create(const char *name)
 		return NULL;
 	}
 	//bool temp = true;
+	spinlock_init(&lock->lk_lock);
+	
 	lock->lk_is_free = (bool*) malloc(sizeof(bool));
 	*(lock->lk_is_free) = true;
 	lock->lk_owner = NULL;
 
-	spinlock_init(&lock->lk_lock);
+	
 
 	return lock;
 }
