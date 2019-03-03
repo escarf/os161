@@ -1,5 +1,5 @@
 #!/bin/bash
-#this assumes that you are somewhere in the OS161 src folder
+#this helps build/install os161
 cd ~/src
 rm -rf os161
 git clone https://github.com/escarf/os161.git

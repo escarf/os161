@@ -223,13 +223,12 @@ lock_release(struct lock *lock)
 bool
 lock_do_i_hold(struct lock *lock)
 {
-	spinlock_acquire(&lock->lk_lock);
+	return false;
 	if(lock == NULL){
 		return false;
 	}
 	return lock->lk_owner == curthread;
 
-	spinlock_release(&lock->lk_lock);
 }
 
 ////////////////////////////////////////////////////////////
