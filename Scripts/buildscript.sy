@@ -1,0 +1,18 @@
+#!/bin/bash
+#this assumes that you are somewhere in the OS161 src folder
+cd ~/src
+rm -rf os161
+git clone https://github.com/escarf/os161.git
+cd os161/kern/conf
+./config ASST1
+cd ../compile/ASST1
+bmake depend
+bmake
+cd ..
+cd ..
+bmake
+bmake install
+cd ~/src/os161
+bmake
+bmake install
+cd ~/os161/root
