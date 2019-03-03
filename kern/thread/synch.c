@@ -162,8 +162,8 @@ lock_create(const char *name)
 		return NULL;
 	}
 	bool temp = true;
-	lock->lk_is_free = temp;
-
+	lock->lk_is_free = (bool*) malloc(sizeof(bool));
+	*(lock->lk_is_free) = true;
 	lock->lk_owner = NULL;
 
 	spinlock_init(&lock->lk_lock);
@@ -178,6 +178,8 @@ lock_destroy(struct lock *lock)
 
 	spinlock_cleanup(&lock->lk_lock);
 	wchan_destroy(lock->lk_wchan);
+
+	free(lock->lk_is_free)
 
 	kfree(lock->lk_name);
 	kfree(lock);
@@ -196,7 +198,7 @@ lock_acquire(struct lock *lock)
 	}
 
 	lock->lk_owner = curthread;
-	lock->lk_is_free = false;
+	*(lock->lk_is_free) = false;
 	
 
 	/* Call this (atomically) once the lock is acquired */
@@ -215,7 +217,7 @@ lock_release(struct lock *lock)
 
 	lock->lk_owner = NULL;
 	
-	lock->lk_is_free = true;
+	*(lock->lk_is_free) = true;
 
 	spinlock_release(&lock->lk_lock);
 }
@@ -224,9 +226,9 @@ bool
 lock_do_i_hold(struct lock *lock)
 {
 	//return false; //for testing
-	if(lock == NULL){
-		return false;
-	}
+	// if(lock == NULL){
+	// 	return false;
+	// }
 	return lock->lk_owner == curthread;
 
 }
