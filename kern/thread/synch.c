@@ -163,6 +163,9 @@ lock_create(const char *name)
 	}
 	bool temp = true;
 	lock->lk_is_free = temp;
+
+	lock->lk_owner = NULL;
+
 	spinlock_init(&lock->lk_lock);
 
 	return lock;
