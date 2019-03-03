@@ -161,7 +161,7 @@ lock_create(const char *name)
 		kfree(lock);
 		return NULL;
 	}
-	bool temp = true;
+	//bool temp = true;
 	lock->lk_is_free = (bool*) malloc(sizeof(bool));
 	*(lock->lk_is_free) = true;
 	lock->lk_owner = NULL;
@@ -225,10 +225,11 @@ lock_release(struct lock *lock)
 bool
 lock_do_i_hold(struct lock *lock)
 {
-	return false; //for testing
-	// if(lock == NULL){
-	// 	return false;
-	// }
+	
+	 if(lock == NULL){
+	 	return false;
+	 }
+	 //return false; //for testing
 	return lock->lk_owner == curthread;
 
 }
