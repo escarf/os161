@@ -199,10 +199,14 @@ lock_acquire(struct lock *lock)
 	/* Call this (atomically) before waiting for a lock */
 	HANGMAN_WAIT(&curthread->t_hangman, &lock->lk_hangman);
 
-	while(! *(lock->lk_is_free)){
+	//while(! *(lock->lk_is_free)){
+	//	wchan_sleep(lock->lk_wchan, &lock->lk_lock);
+	//}
+	
+	while(lock->lk_owner != NULL){
 		wchan_sleep(lock->lk_wchan, &lock->lk_lock);
 	}
-	
+
 	lock->lk_owner = curthread;
 	*(lock->lk_is_free) = false;
 	
@@ -240,13 +244,10 @@ lock_release(struct lock *lock)
 
 bool
 lock_do_i_hold(struct lock *lock)
-{
-	//kprintf("lock name: %s\n",lock->lk_name); //delet this
-	
+{	
 	 if(lock == NULL){
 	 	return false;
 	 }
-	 //return false; //for testing
 	return lock->lk_owner == curthread;
 
 }
