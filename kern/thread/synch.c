@@ -201,9 +201,10 @@ lock_acquire(struct lock *lock)
 	while(!lock->lk_is_free){
 		wchan_sleep(lock->lk_wchan, &lock->lk_lock);
 	}
-
+	KASSERT(lock->lk_is_free);
 	lock->lk_owner = curthread;
 	*(lock->lk_is_free) = false;
+
 	
 
 	/* Call this (atomically) once the lock is acquired */
@@ -230,7 +231,7 @@ lock_release(struct lock *lock)
 bool
 lock_do_i_hold(struct lock *lock)
 {
-	kprintf("lock name: %s\n",lock->lk_name);
+	//kprintf("lock name: %s\n",lock->lk_name); //delet this
 	
 	 if(lock == NULL){
 	 	return false;
