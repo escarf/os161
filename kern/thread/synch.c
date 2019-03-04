@@ -198,16 +198,20 @@ lock_acquire(struct lock *lock)
 	/* Call this (atomically) before waiting for a lock */
 	HANGMAN_WAIT(&curthread->t_hangman, &lock->lk_hangman);
 
-	while(!lock->lk_is_free){
+	while(! *(lock->lk_is_free)){
 		wchan_sleep(lock->lk_wchan, &lock->lk_lock);
 	}
 	
 	lock->lk_owner = curthread;
-	lock->lk_is_free = false;
+	*(lock->lk_is_free) = false;
 	
 	//KASSERT(!(lock->lk_is_free));
 	//!!! the above line crashes the system before it really starts!
 
+
+	//*(lock->lk_is_free)
+
+	
 	/* Call this (atomically) once the lock is acquired */
 	HANGMAN_ACQUIRE(&curthread->t_hangman, &lock->lk_hangman);
 
