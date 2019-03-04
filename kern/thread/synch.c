@@ -166,8 +166,8 @@ lock_create(const char *name)
 	//lock->lk_is_free = (bool*) malloc(sizeof(bool));
 
 
-	lock->lk_is_free = kmalloc(sizeof(bool));
-	*(lock->lk_is_free) = true;
+	//lock->lk_is_free = kmalloc(sizeof(bool));
+	//*(lock->lk_is_free) = true;
 	spinlock_init(&lock->lk_lock);
 	lock->lk_owner = NULL;
 
@@ -208,14 +208,14 @@ lock_acquire(struct lock *lock)
 	}
 
 	lock->lk_owner = curthread;
-	*(lock->lk_is_free) = false;
+	//*(lock->lk_is_free) = false;
 	
 	//KASSERT(!(lock->lk_is_free));
 	//!!! the above line crashes the system before it really starts!
 
 
 	//!(*(lock->lk_is_free))
-	KASSERT(!(*(lock->lk_is_free)));
+	//KASSERT(!(*(lock->lk_is_free)));
 
 
 	/* Call this (atomically) once the lock is acquired */
@@ -233,7 +233,7 @@ lock_release(struct lock *lock)
 	/* Call this (atomically) when the lock is released */	
 	HANGMAN_RELEASE(&curthread->t_hangman, &lock->lk_hangman);	
 		
-	*(lock->lk_is_free) = true;
+	//*(lock->lk_is_free) = true;
 	lock->lk_owner = NULL;	
 		
 	wchan_wakeone(lock->lk_wchan, &lock->lk_lock);
