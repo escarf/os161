@@ -229,11 +229,11 @@ lock_release(struct lock *lock)
 	/* Call this (atomically) when the lock is released */	
 	HANGMAN_RELEASE(&curthread->t_hangman, &lock->lk_hangman);	
 		
-	
+	*(lock->lk_is_free) = true;
+	lock->lk_owner = NULL;	
 		
 	wchan_wakeone(lock->lk_wchan, &lock->lk_lock);
-	*(lock->lk_is_free) = true;
-	lock->lk_owner = NULL;
+
 	
 	spinlock_release(&lock->lk_lock);
 }
