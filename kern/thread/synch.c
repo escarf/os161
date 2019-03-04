@@ -141,7 +141,7 @@ V(struct semaphore *sem)
 struct lock *
 lock_create(const char *name)
 {
-	kprintf("testbub0\n");
+	kprintf("testbubA\n");
 	struct lock *lock;
 
 	lock = kmalloc(sizeof(*lock));
@@ -203,9 +203,10 @@ lock_acquire(struct lock *lock)
 	}
 	
 	lock->lk_owner = curthread;
-	*(lock->lk_is_free) = false;
+	lock->lk_is_free = false;
+
 	//KASSERT(!lock->lk_is_free);
-	
+	//!!! the above line crashes the system before it really starts!
 
 	/* Call this (atomically) once the lock is acquired */
 	HANGMAN_ACQUIRE(&curthread->t_hangman, &lock->lk_hangman);
