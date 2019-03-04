@@ -141,7 +141,7 @@ V(struct semaphore *sem)
 struct lock *
 lock_create(const char *name)
 {
-	kprintf("testbub1\n");
+	kprintf("testbub0\n");
 	struct lock *lock;
 
 	lock = kmalloc(sizeof(*lock));
@@ -201,10 +201,10 @@ lock_acquire(struct lock *lock)
 	while(!lock->lk_is_free){
 		wchan_sleep(lock->lk_wchan, &lock->lk_lock);
 	}
-	KASSERT(lock->lk_is_free);
+	
 	lock->lk_owner = curthread;
 	*(lock->lk_is_free) = false;
-
+	KASSERT(!lock->lk_is_free);
 	
 
 	/* Call this (atomically) once the lock is acquired */
@@ -224,7 +224,8 @@ lock_release(struct lock *lock)
 	lock->lk_owner = NULL;
 	
 	*(lock->lk_is_free) = true;
-
+	
+	wchan_wakeone(lock->lk_wchan, &lock->lk_lock);
 	spinlock_release(&lock->lk_lock);
 }
 
