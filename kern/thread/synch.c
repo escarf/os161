@@ -230,7 +230,7 @@ lock_release(struct lock *lock)
 bool
 lock_do_i_hold(struct lock *lock)
 {
-	kprintf("lock name: %s\n",lock->lk_name)
+	kprintf("lock name: %s\n",lock->lk_name);
 	
 	 if(lock == NULL){
 	 	return false;
