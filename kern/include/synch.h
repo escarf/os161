@@ -81,7 +81,6 @@ struct lock {
         struct wchan *lk_wchan;
 	struct spinlock lk_lock;
         struct thread *lk_owner;
-        //volatile bool *lk_is_free;
 };
 
 struct lock *lock_create(const char *name);

@@ -161,17 +161,8 @@ lock_create(const char *name)
 		return NULL;
 	}
 
-	
-	
-	//lock->lk_is_free = (bool*) malloc(sizeof(bool));
-
-
-	//lock->lk_is_free = kmalloc(sizeof(bool));
-	//*(lock->lk_is_free) = true;
 	spinlock_init(&lock->lk_lock);
 	lock->lk_owner = NULL;
-
-	
 
 	return lock;
 }
@@ -185,8 +176,6 @@ lock_destroy(struct lock *lock)
 	spinlock_cleanup(&lock->lk_lock);
 	wchan_destroy(lock->lk_wchan);
 
-	//kfree(lock->lk_is_free);
-
 	kfree(lock->lk_name);
 	kfree(lock);
 }
@@ -198,29 +187,14 @@ lock_acquire(struct lock *lock)
 	spinlock_acquire(&lock->lk_lock);
 	/* Call this (atomically) before waiting for a lock */
 	HANGMAN_WAIT(&curthread->t_hangman, &lock->lk_hangman);
-
-	//while(! *(lock->lk_is_free)){
-	//	wchan_sleep(lock->lk_wchan, &lock->lk_lock);
-	//}
 	
 	while(lock->lk_owner != NULL){
 		wchan_sleep(lock->lk_wchan, &lock->lk_lock);
 	}
-
 	lock->lk_owner = curthread;
-	//*(lock->lk_is_free) = false;
-	
-	//KASSERT(!(lock->lk_is_free));
-	//!!! the above line crashes the system before it really starts!
-
-
-	//!(*(lock->lk_is_free))
-	//KASSERT(!(*(lock->lk_is_free)));
-
 
 	/* Call this (atomically) once the lock is acquired */
 	HANGMAN_ACQUIRE(&curthread->t_hangman, &lock->lk_hangman);
-
 	spinlock_release(&lock->lk_lock);
 }
 
@@ -233,12 +207,9 @@ lock_release(struct lock *lock)
 	/* Call this (atomically) when the lock is released */	
 	HANGMAN_RELEASE(&curthread->t_hangman, &lock->lk_hangman);	
 		
-	//*(lock->lk_is_free) = true;
-	lock->lk_owner = NULL;	
-		
+	lock->lk_owner = NULL;		
 	wchan_wakeone(lock->lk_wchan, &lock->lk_lock);
 
-	
 	spinlock_release(&lock->lk_lock);
 }
 
