@@ -225,7 +225,7 @@ lock_release(struct lock *lock)
 	
 	*(lock->lk_is_free) = true;
 	
-	wchan_wakeone(lock->lk_wchan, &lock->lk_lock);
+	//wchan_wakeone(lock->lk_wchan, &lock->lk_lock);
 	spinlock_release(&lock->lk_lock);
 }
 
