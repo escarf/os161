@@ -209,9 +209,10 @@ lock_acquire(struct lock *lock)
 	//!!! the above line crashes the system before it really starts!
 
 
-	//*(lock->lk_is_free)
+	//!(*(lock->lk_is_free))
+	KASSERT(!(*(lock->lk_is_free)));
 
-	
+
 	/* Call this (atomically) once the lock is acquired */
 	HANGMAN_ACQUIRE(&curthread->t_hangman, &lock->lk_hangman);
 
