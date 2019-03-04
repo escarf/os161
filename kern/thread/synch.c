@@ -141,7 +141,6 @@ V(struct semaphore *sem)
 struct lock *
 lock_create(const char *name)
 {
-	kprintf("testbubA\n");
 	struct lock *lock;
 
 	lock = kmalloc(sizeof(*lock));
@@ -161,14 +160,15 @@ lock_create(const char *name)
 		kfree(lock);
 		return NULL;
 	}
-	//bool temp = true;
-	spinlock_init(&lock->lk_lock);
+
+	
 	
 	//lock->lk_is_free = (bool*) malloc(sizeof(bool));
 
 
 	lock->lk_is_free = kmalloc(sizeof(bool));
 	*(lock->lk_is_free) = true;
+	spinlock_init(&lock->lk_lock);
 	lock->lk_owner = NULL;
 
 	
@@ -180,6 +180,7 @@ void
 lock_destroy(struct lock *lock)
 {
 	KASSERT(lock != NULL);
+	KASSERT(!lock_do_i_hold(lock));
 
 	spinlock_cleanup(&lock->lk_lock);
 	wchan_destroy(lock->lk_wchan);
@@ -224,14 +225,9 @@ lock_release(struct lock *lock)
 {
 	KASSERT(lock != NULL);
 	spinlock_acquire(&lock->lk_lock);
-	/* Call this (atomically) when the lock is released */
 
-	
-
-	
-	HANGMAN_RELEASE(&curthread->t_hangman, &lock->lk_hangman);
-
-	
+	/* Call this (atomically) when the lock is released */	
+	HANGMAN_RELEASE(&curthread->t_hangman, &lock->lk_hangman);	
 		
 	*(lock->lk_is_free) = true;
 		
