@@ -141,7 +141,7 @@ V(struct semaphore *sem)
 struct lock *
 lock_create(const char *name)
 {
-	kprintf("testbub0\n");
+	kprintf("testbubA\n");
 	struct lock *lock;
 
 	lock = kmalloc(sizeof(*lock));
