@@ -225,13 +225,19 @@ lock_release(struct lock *lock)
 	KASSERT(lock != NULL);
 	spinlock_acquire(&lock->lk_lock);
 	/* Call this (atomically) when the lock is released */
+
+	
+
+	
 	HANGMAN_RELEASE(&curthread->t_hangman, &lock->lk_hangman);
 
+	
+		
+	*(lock->lk_is_free) = true;
+		
+	wchan_wakeone(lock->lk_wchan, &lock->lk_lock);
 	lock->lk_owner = NULL;
 	
-	*(lock->lk_is_free) = true;
-	
-	//wchan_wakeone(lock->lk_wchan, &lock->lk_lock);
 	spinlock_release(&lock->lk_lock);
 }
 
