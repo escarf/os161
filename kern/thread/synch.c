@@ -204,7 +204,7 @@ lock_acquire(struct lock *lock)
 	
 	lock->lk_owner = curthread;
 	*(lock->lk_is_free) = false;
-	KASSERT(!lock->lk_is_free);
+	//KASSERT(!lock->lk_is_free);
 	
 
 	/* Call this (atomically) once the lock is acquired */
